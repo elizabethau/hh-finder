@@ -5,9 +5,9 @@ location and what the current time is.
 
 ## Features
 
-*list Confirm Happy Hour times
-*list Submit new happy hour edits
-*list Get directions to your desired happy hour location
+* Confirm Happy Hour times
+* Submit new happy hour edits
+* Get directions to your desired happy hour location
 
 
 ## Planning
