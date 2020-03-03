@@ -5,11 +5,11 @@ location and what the current time is.
 
 ## Features
 
-Confirm Happy Hour times
+*list Confirm Happy Hour times
+*list Submit new happy hour edits
+*list Get directions to your desired happy hour location
 
-Submit new happy hour edits
-
-Get directions to your desired happy hour location
 
 ## Planning
-Project Layout [link]https://github.com/elizabethau/hh-finder/blob/master/HH-finder%20.drawio
+
+Project Layout [link](https://github.com/elizabethau/hh-finder/blob/master/HH-finder%20.drawio)
