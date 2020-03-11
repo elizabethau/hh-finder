@@ -42,22 +42,29 @@ def index():
     return render_template("landing.html")
 
 
-@app.route("/places")
-def show_places():
+@app.route("/results")
+def show_results():
+    """Returns page with top 10 results"""
+
+    businesses = data['businesses']
+    # name = data['businesses'][i]['name']
+    # address = data['businesses'][i]['location']['display_address']
+    #list of dictionaries
 
     nu_list = []
-    businesses = data['businesses']
-    for business in businesses:
-        nu_list.append(business['location']['display_address'])
 
-    return jsonify(nu_list)
+    for business in businesses:
+        nu_list.append(business['name'])
+
+    return render_template("results.html", 
+                           nu_list=nu_list)
+    # return jsonify(nu_list)
     
-    """Returns top 10 places with happy hours"""
 
 
 @app.route("/place/<rest_id>")
 def show_restaurant():
-    """Displays page for the restaurant"""
+    """Displays restaurant details"""
 
 
 if __name__ == "__main__":
