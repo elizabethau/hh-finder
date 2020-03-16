@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <h1>Submit a Location</h1>
+
+    <form>
+
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Restaurant">
+      </div>
+
+      {% for day in week %}
+
+      <div class="form-group row">
+        <label for={{day}} class="col-sm-2 col-form-label">{{day}}</label>
+        <div class="col-sm-2">
+            <select class="form-control">
+              <option>None</option>
+              <option>5:00</option>
+              <option>6:00</option>
+              <option>7:00</option>
+              <option>8:00</option>
+            </select> 
+        </div>
+        <label for="Monday" class="col-sm-0.5 col-form-label">to</label>
+        <div class="col-sm-2">
+            <select class="form-control">
+              <option>None</option>
+              <option>5:00</option>
+              <option>6:00</option>
+              <option>7:00</option>
+              <option>8:00</option>
+            </select> 
+        </div>
+      </div>
+
+      {% endfor %}
+      <div class="center">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+
+    </form>
+
+{% endblock %}
