@@ -6,23 +6,14 @@ from flask_debugtoolbar import DebugToolbarExtension
 import jinja2
 #jinja is a template system for python
 
-from model import Restaurant, HappyHour, connect_to_db, db
+from model import Happyhour, connect_to_db, db
 #importing our Database 
 
 import requests
+
+from utils import send_api_request, send_api_request2
 # for API use
 
-#yelp api starts yere
-url = "https://api.yelp.com/v3/businesses/search?location=Minneapolis, Minnesota"
-
-payload = {}
-headers = {
-  'Authorization': 'Bearer NTAwKwdS4nSrXJxuv_wSsGmRyLse6bvFW-gECWO4Kvu20lmz8iKfsoA0Oix4MSJElLXw5LCHjgBiCIH8Z7OuEr-jgfy_yFZDzpaenyZvjy0H7BUWxuh62hk0IGdgXnYx'
-}
-
-response = requests.request("GET", url, headers=headers, data = payload)
-data = response.json()
-# yelp api ends here
 
 app = Flask(__name__)
 
@@ -46,25 +37,45 @@ def index():
 def show_results():
     """Returns page with top 10 results"""
 
-    businesses = data['businesses']
+    user_input = request.args.get('input')
+
+    if user_input == "":
+        user_input = "Minneapolis, MN"
+
+
+    yelp_response = send_api_request(user_input)
+
+
+    businesses = yelp_response['businesses']
     # name = data['businesses'][i]['name']
     # address = data['businesses'][i]['location']['display_address']
-    #list of dictionaries
 
-    nu_list = []
-
-    for business in businesses:
-        nu_list.append(business['name'])
 
     return render_template("results.html", 
-                           nu_list=nu_list)
-    # return jsonify(nu_list)
-    
+                           businesses=businesses,
+                           user_input=user_input)    
 
 
-@app.route("/place/<rest_id>")
-def show_restaurant():
+@app.route("/details/<yelp_id>")
+def show_restaurant(yelp_id):
     """Displays restaurant details"""
+
+    yelp_response = send_api_request2(yelp_id)
+
+    business = Happyhour.query.filter_by(yelp_id=yelp_id).all()
+
+    return render_template("details.html", 
+                            yelp_response=yelp_response,
+                            business=business.start)
+
+
+@app.route("/submit")
+def submit_new():
+
+    week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+    return render_template("form.html",
+                           week=week)
 
 
 if __name__ == "__main__":

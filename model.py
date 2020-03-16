@@ -1,40 +1,35 @@
 from flask_sqlalchemy import SQLAlchemy
 
-
 db = SQLAlchemy()
-
+                             
 
 # db.Model class is required for SQLAlchemy, do not need __init__() method
-class HappyHour(db.Model):
 
-    __tablename__ = "hh"
+# class Restaurant(db.Model):
 
-    rest_id = db.Column(db.Integer, db.ForeignKey('restaurant.rest_id'))
-    hh_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    start = db.Column(db.Integer, nullable = False)
-    end = db.Column(db.Integer, nullable = False)
-    day = db.Column(db.String(10), nullable = False)
+#     __tablename__ = "restaurants"
+
+#     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     yelp_id = db.Column(db.String(50), unique=True)
+
+
+class Happyhour(db.Model):
+
+    __tablename__ = "happyhours"
+
+    happyhour_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    yelp_id = db.Column(db.String(50))
+    # restaurant_id = db.Column(db.Integer, db.ForeignKey("restaurants.restaurant_id"), nullable=False)
+    start = db.Column(db.Integer)
+    end = db.Column(db.Integer)
+    day = db.Column(db.Integer, nullable = False)
+
+    # restaurant = db.relationship("Restaurant", backref="happyhours")
 
     
     def __repr__(self):
 
-        return f"HH is on {self.day} from {self.start} to {self.end}"
-
-
-class Restaurant(db.Model):
-
-    __tablename__ = "restaurant"
-
-    rest_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(32), nullable = False)
-    address = db.Column(db.String(56), nullable = False)
-    menu = db.Column(db.String(500))
-
-
-    def __repr__(self):
-
-        return f"Restaurant: {self.name} is at {self.address}"
-
+        return f"Happy hour on {self.day} is from {self.start} to {self.end}"
 
 
 def connect_to_db(app):
@@ -53,5 +48,5 @@ if __name__ == "__main__":
 
     from server import app
     connect_to_db(app)
-    print("Connected to DB mothafucka.")
+    print("Connected to database.")
 

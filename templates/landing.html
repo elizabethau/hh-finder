@@ -1,7 +1,6 @@
 <html>
 
 <head>
-    <!-- <link rel="stylesheet" href="/static/css/homepage.css"> -->
     <title>HH</title>
     <!-- Load Bootstrap 4 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -17,12 +16,18 @@
 
         <h1>It's 5 o'clock somewhere.</h1>
 
-        <h3>Find your happy hour.</h3>
+        <h2>Find your happy hour.</h2>
 
-        <form><input type="text" class="form-control-lg" placeholder="city, zip">
+        <div>
+        <form action ="/results">
+            <div>
+            <input type="text" class="form-control-lg" name="input" placeholder="ex. 55403">
+            </div>
+            <div >
+            <button type="submit" class="btn btn-primary">Right Now.</button>
+            </div> 
         </form>
-
-        <a href="/results" class="btn btn-lg btn-primary">Right Now</a>
+        </div>
 
     </div>
 </div>
