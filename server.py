@@ -62,11 +62,11 @@ def show_restaurant(yelp_id):
 
     yelp_response = send_api_request2(yelp_id)
 
-    business = Happyhour.query.filter_by(yelp_id=yelp_id).all()
+    business = Happyhour.query.get(yelp_id=yelp_id)
 
     return render_template("details.html", 
                             yelp_response=yelp_response,
-                            business=business.start)
+                            business=business)
 
 
 @app.route("/submit")
