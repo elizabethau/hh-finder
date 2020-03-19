@@ -2,7 +2,7 @@ import requests
 
 def send_api_request(user_input):
 
-    url = "https://api.yelp.com/v3/businesses/search?location=" + user_input 
+    url = "https://api.yelp.com/v3/businesses/search?location=" + user_input + "&categories=nightlife"
 
     payload = {}
     headers = {

@@ -14,7 +14,7 @@ import requests
 from utils import send_api_request, send_api_request2
 # for API use
 
-from datetime import date
+from datetime import date, datetime
 
 
 app = Flask(__name__)
@@ -52,17 +52,19 @@ def show_results():
 
     day_int = date.today().weekday()
     day_str = date.today().strftime('%A')
+    time = datetime.now().strftime("%I:%M %p")
 
     for business in yelp_businesses:
 
-        happyhour = Happyhour.query.filter_by(yelp_id=business['id']).first()
-        business["happyhour"] = happyhour
+        happyhour = Happyhour.query.filter_by(yelp_id=business['id'], day=day_int).first()
 
+        business["happyhour"] = happyhour
 
     return render_template("results.html", 
                            businesses=yelp_businesses,
                            user_location=user_location,
-                           day_str=day_str)    
+                           day_str=day_str,
+                           time=time)    
 
 
 @app.route("/details/<yelp_id>")
@@ -71,11 +73,23 @@ def show_restaurant(yelp_id):
 
     yelp_response = send_api_request2(yelp_id)
     
-    happyhour = Happyhour.query.filter_by(yelp_id=yelp_id).first()
+    monday = Happyhour.query.filter_by(yelp_id=yelp_id, day=0).first()
+    tuesday = Happyhour.query.filter_by(yelp_id=yelp_id, day=1).first()
+    wednesday = Happyhour.query.filter_by(yelp_id=yelp_id, day=2).first()
+    thursday = Happyhour.query.filter_by(yelp_id=yelp_id, day=3).first()
+    friday = Happyhour.query.filter_by(yelp_id=yelp_id, day=4).first()
+    saturday = Happyhour.query.filter_by(yelp_id=yelp_id, day=5).first()
+    sunday = Happyhour.query.filter_by(yelp_id=yelp_id, day=6).first()
 
     return render_template("details.html", 
                             yelp_response=yelp_response,
-                            happyhour=happyhour)
+                            monday=monday,
+                            tuesday=tuesday,
+                            wednesday=wednesday,
+                            thursday=thursday,
+                            friday=friday,
+                            saturday=saturday,
+                            sunday=sunday)
 
 
 @app.route("/submit")

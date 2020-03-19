@@ -28,7 +28,7 @@ class Happyhour(db.Model):
     
     def __repr__(self):
 
-        return f"Happy hour on {self.day} is from {self.start} to {self.end}"
+        return f"{self.start} to {self.end}"
 
 
 def connect_to_db(app):
