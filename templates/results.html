@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <h1>Happy Hours in {{user_input}}</h1>
+    <h1>Happy Hours for {{day_str}} in {{user_location}}</h1>
 
       {% for business in businesses %}
-  
+        
     <div class="card" style="width: 18rem;">
       <div class="card-body">
         <h5 class="card-title"><a href=/details/{{business.id}}>{{business.name}}</a></h5>
         <h6 class="card-subtitle mb-2 text-muted">{{business.location.address1}}</h6>
-        <h6 class="card-subtitle mb-2 text-muted">{{business.location.address2}}</h6>
-        <p class="card-text">{{business.distance/1609}}.</p>
-        <h5 class="card-title"><a href="#" class="card-link">5 - 8</a></h5>
+        <p class="card-text">{{"%.2f"|format(business.distance/1609)}} mi </p>
+        <h5 class="card-title">{{business.happyhour}}</h5>
         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
       </div>
     </div>

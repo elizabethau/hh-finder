@@ -14,6 +14,8 @@ import requests
 from utils import send_api_request, send_api_request2
 # for API use
 
+from datetime import date
+
 
 app = Flask(__name__)
 
@@ -37,23 +39,30 @@ def index():
 def show_results():
     """Returns page with top 10 results"""
 
-    user_input = request.args.get('input')
+    user_location = request.args.get('input')
 
-    if user_input == "":
-        user_input = "Minneapolis, MN"
-
-
-    yelp_response = send_api_request(user_input)
+    # location defaults to Minneapolis if not entered
+    if user_location == "":
+        user_location = "Minneapolis, MN"
 
 
-    businesses = yelp_response['businesses']
-    # name = data['businesses'][i]['name']
-    # address = data['businesses'][i]['location']['display_address']
+    # yelp_response is a dictionary of dictionaries
+    yelp_response = send_api_request(user_location)
+    yelp_businesses = yelp_response['businesses']
+
+    day_int = date.today().weekday()
+    day_str = date.today().strftime('%A')
+
+    for business in yelp_businesses:
+
+        happyhour = Happyhour.query.filter_by(yelp_id=business['id']).first()
+        business["happyhour"] = happyhour
 
 
     return render_template("results.html", 
-                           businesses=businesses,
-                           user_input=user_input)    
+                           businesses=yelp_businesses,
+                           user_location=user_location,
+                           day_str=day_str)    
 
 
 @app.route("/details/<yelp_id>")
@@ -61,12 +70,12 @@ def show_restaurant(yelp_id):
     """Displays restaurant details"""
 
     yelp_response = send_api_request2(yelp_id)
-
-    business = Happyhour.query.get(yelp_id=yelp_id)
+    
+    happyhour = Happyhour.query.filter_by(yelp_id=yelp_id).first()
 
     return render_template("details.html", 
                             yelp_response=yelp_response,
-                            business=business)
+                            happyhour=happyhour)
 
 
 @app.route("/submit")
@@ -79,4 +88,10 @@ def submit_new():
 
 
 if __name__ == "__main__":
+    # so that the server can connect to the database
+    # in addition to the one in model.py
+    connect_to_db(app)
+
     app.run(debug=True, host="0.0.0.0")
+
+    

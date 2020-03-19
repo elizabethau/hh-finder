@@ -2,7 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
                              
-
 # db.Model class is required for SQLAlchemy, do not need __init__() method
 
 # class Restaurant(db.Model):

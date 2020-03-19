@@ -1,7 +1,7 @@
 from sqlalchemy import func
 from model import Happyhour, connect_to_db, db
 
-from server import app
+
 
 
 def load_businesses():
@@ -25,8 +25,8 @@ def load_businesses():
 
 
 if __name__ == "__main__":
+    from server import app
     connect_to_db(app)
-
     # create the tables
     db.create_all()
 
