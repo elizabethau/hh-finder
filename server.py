@@ -27,7 +27,6 @@ app.jinja_env.undefined = jinja2.StrictUndefined
 # to make Debugging easier^
 
 
-
 @app.route("/")
 def index():
     """Returns the landing page if not logged in"""
@@ -72,33 +71,24 @@ def show_restaurant(yelp_id):
     """Displays restaurant details"""
 
     yelp_response = send_api_request2(yelp_id)
-    
-    monday = Happyhour.query.filter_by(yelp_id=yelp_id, day=0).first()
-    tuesday = Happyhour.query.filter_by(yelp_id=yelp_id, day=1).first()
-    wednesday = Happyhour.query.filter_by(yelp_id=yelp_id, day=2).first()
-    thursday = Happyhour.query.filter_by(yelp_id=yelp_id, day=3).first()
-    friday = Happyhour.query.filter_by(yelp_id=yelp_id, day=4).first()
-    saturday = Happyhour.query.filter_by(yelp_id=yelp_id, day=5).first()
-    sunday = Happyhour.query.filter_by(yelp_id=yelp_id, day=6).first()
+    week = {0: 'monday', 1: 'tuesday', 2: 'wednesday', 3: 'thursday',
+            4: 'friday', 5: 'saturday', 6: 'sunday'}
 
+    happy_hour = Happyhour.query.filter(Happyhour.yelp_id == yelp_id,
+                                        Happyhour.day.in_(week.keys())).first()
+
+    # Why return the yelp response? This route is for a single business, right?
     return render_template("details.html", 
-                            yelp_response=yelp_response,
-                            monday=monday,
-                            tuesday=tuesday,
-                            wednesday=wednesday,
-                            thursday=thursday,
-                            friday=friday,
-                            saturday=saturday,
-                            sunday=sunday)
+                           yelp_response=yelp_response,
+                           happy_hour=happy_hour)
 
 
 @app.route("/submit")
 def submit_new():
-
+    # Whats this route for?
     week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-    return render_template("form.html",
-                           week=week)
+    return render_template("form.html", week=week)
 
 
 if __name__ == "__main__":
