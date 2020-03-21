@@ -12,20 +12,30 @@ db = SQLAlchemy()
 #     yelp_id = db.Column(db.String(50), unique=True)
 
 
+class Business(db.Model):
+    __tablename__ = 'businesses'
+
+    business_id = db.Column(db.Integer, primary_key=True)
+    yelp_id = db.Column(db.String, unique=True)
+    name = db.Column(db.String)
+
+    def __repr__(self):
+        return f'<Business {self.id} | {self.name}>'
+
+
 class Happyhour(db.Model):
 
     __tablename__ = "happyhours"
 
     happyhour_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    yelp_id = db.Column(db.String(50))
-    # restaurant_id = db.Column(db.Integer, db.ForeignKey("restaurants.restaurant_id"), nullable=False)
-    start = db.Column(db.Integer)
-    end = db.Column(db.Integer)
-    day = db.Column(db.Integer, nullable = False)
+    business_id = db.Column(db.Integer, db.ForeignKey('businesses'))
+    yelp_id = db.Column(db.String, unique=True)
+    start = db.Column(db.Time)
+    end = db.Column(db.Time)
+    day = db.Column(db.Integer, nullable=False)
 
-    # restaurant = db.relationship("Restaurant", backref="happyhours")
+    business = db.relationship("Business", backref="happy_hours")
 
-    
     def __repr__(self):
 
         return f"{self.start} to {self.end}"
@@ -44,8 +54,9 @@ def connect_to_db(app):
 if __name__ == "__main__":
     # As a convenience, if we run this module interactively, it will leave
     # you in a state of being able to work with the database directly.
-
-    from server import app
+    from flask import Flask
+    # from server import app
+    app = Flask(__name__)
     connect_to_db(app)
+    db.create_all()
     print("Connected to database.")
-
