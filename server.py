@@ -110,33 +110,58 @@ def show_restaurant(yelp_id):
 @app.route("/submit/<yelp_id>")
 def submit_form(yelp_id):
 
-
-    week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    # week = [0, 1, 2, 3, 4, 5, 6]
+    week = {0 : 'Monday',
+            1 : 'Tuesday',
+            2 : 'Wednesday', 
+            3 : 'Thursday', 
+            4 : 'Friday', 
+            5 : 'Saturday', 
+            6 : 'Sunday'}
 
     return render_template("form.html",
                            week=week,
-                           place=yelp_id)
+                           yelp_id=yelp_id)
+
 
 @app.route("/thankyou", methods = ['POST'])
 def thank_user():
+    """Retrieves data from form.html"""
 
     # yelp_id = request.form.get('yelp_id')
     # start_time = request.form.get('start_time')
     # end_time = request.form.get('end_time')
     # day = request.form.get('day')
- 
-    for key, val in request.form.items():
-        print (key, val)
+    # print(request.form)
+    # for item in request.form.lists():
+    #     print(item)
+    # for item in request.form.getlist("day"):
+    #     print(item)
+
+    # print(request.form.items())
+
+    for i in range(7):
+    
+
+        day = request.form.getlist("day")[i]
+        start_time = request.form.getlist("start_time")[i]
+        # if start_time == 'Null':
+        #     start_time = None
+        end_time = request.form.getlist("end_time")[i]
+        # if end_time == 'Null':
+        #     end_time = None
+        yelp_id = request.form.getlist("yelp_id")[0]
+
+
+        if start_time != 'Null' and end_time != 'Null':
+
+            happyhour = Happyhour(yelp_id=yelp_id,
+                                  day=day,
+                                  start_time=start_time,
+                                  end_time=end_time)
+
+            db.session.add(happyhour)
      
-        # happyhour = Happyhour(yelp_id=yelp_id,
-        #                       day=day,
-        #                       start_time=start_time,
-        #                       end_time=end_time)
-
-        # db.session.add(happyhour)
-
-    # db.session.commit()
+    db.session.commit()
 
     # print(f'Successfully added: {yelp_id}')
 

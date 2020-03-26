@@ -6,23 +6,24 @@
 
     <form action="/thankyou" METHOD="POST">
 
+
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Restaurant</label>
         <div class="col-sm-4">
-        <input type="text" class="form-control" placeholder= {{place}} disabled>
-        <!-- <input type="hidden" name= "yelp_id" value = {{place}}> -->
+        <input type="text" class="form-control" placeholder= {{yelp_id}} disabled>
+        
+        <input type="hidden" name= "yelp_id" value = {{yelp_id}}>
+
         </div>
       </div>
     
-      {% for day in week %}
+      {% for i, day in week.items() %}
 
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">{{day}}</label>
-        <!-- loop.index accesses the integer of each day -->
-        <input type="hidden" name= "day" value = {{loop.index-1}} >
-        <input type="hidden" name= "yelp_id" value = {{place}}>
+        <input type="hidden" name= "day" value = {{i}} >
         <div class="col-sm-1.5">
-            <select class="form-control" name="start_time">
+            <select class="form-control" name="start_time_{{day}}">
               <option value=Null>None</option>
               <option value=15:00:00>3:00 PM</option>
               <option value=15:30:00>3:30 PM</option>
