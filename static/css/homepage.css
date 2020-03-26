@@ -5,6 +5,10 @@ h1 {
     text-align: center
 }
 
+button {
+    margin-top: 10px;
+}
+
 /* site-wrapper and site-wrapper-inner are to vertically center content using
    table/table-cell vertical centering. */
 

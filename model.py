@@ -4,12 +4,17 @@ db = SQLAlchemy()
                              
 # db.Model class is required for SQLAlchemy, do not need __init__() method
 
-# class Restaurant(db.Model):
+class Restaurant(db.Model):
 
-#     __tablename__ = "restaurants"
+    __tablename__ = "restaurants"
 
-#     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     yelp_id = db.Column(db.String(50), unique=True)
+    restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    yelp_id = db.Column(db.String, unique=True)
+    name = db.Column(db.String)
+
+    def __repr__(self):
+
+        return f"<Restaurant {self.restaurant_id} = {self.name}>"
 
 
 class Happyhour(db.Model):
@@ -17,18 +22,21 @@ class Happyhour(db.Model):
     __tablename__ = "happyhours"
 
     happyhour_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    yelp_id = db.Column(db.String(50))
-    # restaurant_id = db.Column(db.Integer, db.ForeignKey("restaurants.restaurant_id"), nullable=False)
-    start = db.Column(db.Integer)
-    end = db.Column(db.Integer)
-    day = db.Column(db.Integer, nullable = False)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey("restaurants"))
+    yelp_id = db.Column(db.String)
+    day = db.Column(db.Integer)
+    start_time = db.Column(db.Time)
+    end_time = db.Column(db.Time)
+    
 
-    # restaurant = db.relationship("Restaurant", backref="happyhours")
+    restaurant = db.relationship("Restaurant", backref="happyhours")
+
+    # restaurant.happyhours - list of happy hours
 
     
     def __repr__(self):
 
-        return f"{self.start} to {self.end}"
+        return f"{self.start_time} to {self.end_time}"
 
 
 def connect_to_db(app):

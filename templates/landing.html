@@ -6,32 +6,24 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!-- custom CSS elements -->
     <link rel="stylesheet" href="/static/css/homepage.css">
-    
 </head>
 
-
 <body id="animate-area">
-
-<div class="site-wrapper">
-    <div class="site-wrapper-inner">
-
-        <h1>It's 5 o'clock somewhere.</h1>
-
-        <h2>Find your happy hour.</h2>
-
-        <div>
-        <form action ="/results">
+    <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+            <h1>It's 5 o'clock somewhere.</h1>
+            <h2>Find your happy hour.</h2>
             <div>
-            <input type="text" class="form-control-lg" name="input" placeholder="ex. 55403">
+                <form action ="/results">
+                <div>
+                    <input type="text" class="form-control-lg" name="input" placeholder="ex. Minneapolis, MN">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Right Now.</button>
+                </div> 
+                </form>
             </div>
-            <div >
-            <button type="submit" class="btn btn-primary">Right Now.</button>
-            </div> 
-        </form>
         </div>
-
     </div>
-</div>
-
 </body>
 </html>

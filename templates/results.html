@@ -1,14 +1,47 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <h1>Happy Hours for {{user_location}} on {{day_str}} at {{time}}</h1>
-<div class="row">
-      {% for business in businesses %}
+  <h1>Happy Hours for {{user_location}} on {{day_str}} at {{time}}</h1>
+
+
+  <div class="row">
+    <div class="col-sm-6">
+    <form action ="/search" class="form-inline">
+      <div class="form-group mx-sm-3 mb-2">
+        <input type="text" class="form-control" name="search" placeholder="Search for a restaurant ex. Butcher & The Boar" >
+        <!-- Passing along hidden input here -->
+        <input type="hidden" name= "user_location" value = {{user_location}}>
+      </div>
+      <button type="submit" class="btn btn-primary mb-2">Search</button>
+      
+    </form>
+    </div>
+    
+    <div class="col-sm-6">
+      <button type="button" class="btn btn-outline-success">Open Now</button>
+     
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dropdown button
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="row">
+      
+  {% for business in businesses %}
         
   <div class="col-sm-3">
     <div class="card" style="width: 18rem;">
       <img src={{business.image_url}} class="card-img-top">
       <div class="card-body">
+        <!-- Links to detail route here -->
         <h5 class="card-title"><a href=/details/{{business.id}}>{{business.name}}</a></h5>
         <h6 class="card-subtitle mb-2 text-muted">{{business.location.address1}}</h6>
         <p class="card-text">{{"%.2f"|format(business.distance/1609)}} mi </p>
@@ -18,9 +51,10 @@
     </div>
   </div>
 
+  {% endfor %}
 
-      {% endfor %}
-</div>
-    <h1>Don't see a place? Add it <a href=/submit>here</a>.</h1>
+  </div>
+
+  <h1>Don't see a place? Add it <a href=/submit>here</a>.</h1>
 
 {% endblock %}

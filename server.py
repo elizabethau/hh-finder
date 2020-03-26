@@ -11,16 +11,14 @@ from model import Happyhour, connect_to_db, db
 
 import requests
 
-from utils import send_api_request, send_api_request2
+from utils import send_api_request, send_api_request2, send_api_request3
 # for API use
 
 from datetime import date, datetime
 
 
 app = Flask(__name__)
-
-
-app.secret_key = 'pAsSworD123!!!!'
+app.secret_key = 'pAsSworD123'
 
 
 app.jinja_env.undefined = jinja2.StrictUndefined
@@ -45,7 +43,6 @@ def show_results():
     if user_location == "":
         user_location = "Minneapolis, MN"
 
-
     # yelp_response is a dictionary of dictionaries
     yelp_response = send_api_request(user_location)
     yelp_businesses = yelp_response['businesses']
@@ -67,12 +64,30 @@ def show_results():
                            time=time)    
 
 
+@app.route("/search")
+def search():
+    """Searches for a specific restaurant"""
+
+    user_search = request.args.get('search')
+    user_location = request.args.get('user_location')
+
+    yelp_response = send_api_request3(user_search, user_location)
+
+    yelp_businesses = yelp_response['businesses']
+
+
+    return render_template("search_results.html",
+                            businesses=yelp_businesses,
+                            user_search=user_search)
+
+
 @app.route("/details/<yelp_id>")
 def show_restaurant(yelp_id):
-    """Displays restaurant details"""
+    """Shows details for each restaurant"""
 
     yelp_response = send_api_request2(yelp_id)
-    
+
+
     monday = Happyhour.query.filter_by(yelp_id=yelp_id, day=0).first()
     tuesday = Happyhour.query.filter_by(yelp_id=yelp_id, day=1).first()
     wednesday = Happyhour.query.filter_by(yelp_id=yelp_id, day=2).first()
@@ -92,13 +107,40 @@ def show_restaurant(yelp_id):
                             sunday=sunday)
 
 
-@app.route("/submit")
-def submit_new():
+@app.route("/submit/<yelp_id>")
+def submit_form(yelp_id):
+
 
     week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    # week = [0, 1, 2, 3, 4, 5, 6]
 
     return render_template("form.html",
-                           week=week)
+                           week=week,
+                           place=yelp_id)
+
+@app.route("/thankyou", methods = ['POST'])
+def thank_user():
+
+    # yelp_id = request.form.get('yelp_id')
+    # start_time = request.form.get('start_time')
+    # end_time = request.form.get('end_time')
+    # day = request.form.get('day')
+ 
+    for key, val in request.form.items():
+        print (key, val)
+     
+        # happyhour = Happyhour(yelp_id=yelp_id,
+        #                       day=day,
+        #                       start_time=start_time,
+        #                       end_time=end_time)
+
+        # db.session.add(happyhour)
+
+    # db.session.commit()
+
+    # print(f'Successfully added: {yelp_id}')
+
+    return 'Thank you'
 
 
 if __name__ == "__main__":

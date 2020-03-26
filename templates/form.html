@@ -2,35 +2,72 @@
 
 {% block body %}
 
-    <h1>Submit a Location</h1>
+    <h1>Submit Hours</h1>
 
-    <form>
+    <form action="/thankyou" METHOD="POST">
 
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Restaurant">
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Restaurant</label>
+        <div class="col-sm-4">
+        <input type="text" class="form-control" placeholder= {{place}} disabled>
+        <!-- <input type="hidden" name= "yelp_id" value = {{place}}> -->
+        </div>
       </div>
-
+    
       {% for day in week %}
 
       <div class="form-group row">
-        <label for={{day}} class="col-sm-2 col-form-label">{{day}}</label>
-        <div class="col-sm-2">
-            <select class="form-control">
-              <option>None</option>
-              <option>5:00</option>
-              <option>6:00</option>
-              <option>7:00</option>
-              <option>8:00</option>
+        <label class="col-sm-2 col-form-label">{{day}}</label>
+        <!-- loop.index accesses the integer of each day -->
+        <input type="hidden" name= "day" value = {{loop.index-1}} >
+        <input type="hidden" name= "yelp_id" value = {{place}}>
+        <div class="col-sm-1.5">
+            <select class="form-control" name="start_time">
+              <option value=Null>None</option>
+              <option value=15:00:00>3:00 PM</option>
+              <option value=15:30:00>3:30 PM</option>
+              <option value=16:00:00>4:00 PM</option>
+              <option value=16:30:00>4:30 PM</option>
+              <option value=17:00:00>5:00 PM</option>
+              <option value=17:30:00>5:30 PM</option>
+              <option value=18:00:00>6:00 PM</option>
+              <option value=18:30:00>6:30 PM</option>
+              <option value=19:00:00>7:00 PM</option>
+              <option value=19:30:00>7:30 PM</option>
+              <option value=20:00:00>8:00 PM</option>
+              <option value=20:30:00>8:30 PM</option>
+              <option value=21:00:00>9:00 PM</option>
+              <option value=21:30:00>9:30 PM</option>
+              <option value=22:00:00>10:00 PM</option>
+              <option value=22:30:00>10:30 PM</option>
+              <option value=23:00:00>11:00 PM</option>
+              <option value=23:30:00>11:30 PM</option>
+              <option value=00:00:00>12:00 AM</option>
             </select> 
         </div>
-        <label for="Monday" class="col-sm-0.5 col-form-label">to</label>
-        <div class="col-sm-2">
-            <select class="form-control">
-              <option>None</option>
-              <option>5:00</option>
-              <option>6:00</option>
-              <option>7:00</option>
-              <option>8:00</option>
+              <label class="col-sm-1 col-form-label">to</label>
+        <div class="col-sm-1.5">
+            <select class="form-control" name="end_time">
+              <option value=Null>None</option>
+              <option value=15:00:00>3:00 PM</option>
+              <option value=15:30:00>3:30 PM</option>
+              <option value=16:00:00>4:00 PM</option>
+              <option value=16:30:00>4:30 PM</option>
+              <option value=17:00:00>5:00 PM</option>
+              <option value=17:30:00>5:30 PM</option>
+              <option value=18:00:00>6:00 PM</option>
+              <option value=18:30:00>6:30 PM</option>
+              <option value=19:00:00>7:00 PM</option>
+              <option value=19:30:00>7:30 PM</option>
+              <option value=20:00:00>8:00 PM</option>
+              <option value=20:30:00>8:30 PM</option>
+              <option value=21:00:00>9:00 PM</option>
+              <option value=21:30:00>9:30 PM</option>
+              <option value=22:00:00>10:00 PM</option>
+              <option value=22:30:00>10:30 PM</option>
+              <option value=23:00:00>11:00 PM</option>
+              <option value=23:30:00>11:30 PM</option>
+              <option value=00:00:00>12:00 AM</option>
             </select> 
         </div>
       </div>

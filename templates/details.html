@@ -1,15 +1,36 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h2>{{yelp_response.name}}</h2>
-<h2>{{yelp_response.location.address1}}</h2>
-<h2>{{yelp_response.display_phone}}</h2>
-<h2>Happy Hours:</h2>
-<h3>Monday: {{monday}} </h3>
-<h3>Tuesday: {{tuesday}}</h3>
-<h3>Wednesday: {{wednesday}}</h3>
-<h3>Thursday: {{thursday}}</h3>
-<h3>Friday: {{friday}}</h3>
-<h3>Saturday: {{saturday}}</h3>
-<h3>Sunday: {{sunday}}</h3>
+
+
+
+<div class="container">
+ 
+  <div class="row">
+    <div class="col-8">
+        <h2>{{yelp_response.name}}</h2>
+        <p>
+            {{yelp_response.location.display_address[0]}}<br>
+            {{yelp_response.location.display_address[1]}}
+        </p>
+        <p>{{yelp_response.display_phone}}</p>
+        <h2>Happy Hour Specials</h2>
+    </div>
+
+    <div class="col-4">
+        <h2>Happy Hours:</h2>
+        <h4>Monday: {{monday}} </h4>
+        <h4>Tuesday: {{tuesday}}</h4>
+        <h4>Wednesday: {{wednesday}}</h4>
+        <h4>Thursday: {{thursday}}</h4>
+        <h4>Friday: {{friday}}</h4>
+        <h4>Saturday: {{saturday}}</h4>
+        <h4>Sunday: {{sunday}}</h4>
+        <button type="button" class="btn btn-success">Confirm Hours</button>
+        <!-- Links to input route here -->
+        <a class="btn btn-secondary" href="/submit/{{yelp_response.id}}" role="button">Suggest Edits</a>
+
+    </div>
+  </div>
+</div>
 {% endblock %}
