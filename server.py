@@ -1,29 +1,17 @@
 from jinja2 import StrictUndefined
-
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-
 import jinja2
-#jinja is a template system for python
-
 from model import Happyhour, connect_to_db, db
-#importing our Database 
-
 import requests
-
 from utils import send_api_request, send_api_request2, send_api_request3
-# for API use
-
-from datetime import date, datetime
+from datetime import datetime
 
 
 app = Flask(__name__)
 app.secret_key = 'pAsSworD123'
-
-
 app.jinja_env.undefined = jinja2.StrictUndefined
 # to make Debugging easier^
-
 
 
 @app.route("/")
@@ -35,33 +23,41 @@ def index():
 
 @app.route("/results")
 def show_results():
-    """Returns page with top 10 results"""
+    """Returns page with all results"""
 
     user_location = request.args.get('input')
 
-    # location defaults to Minneapolis if not entered
+    # Location defaults to Minneapolis if not entered
     if user_location == "":
         user_location = "Minneapolis, MN"
 
-    # yelp_response is a dictionary of dictionaries
     yelp_response = send_api_request(user_location)
     yelp_businesses = yelp_response['businesses']
+    latitude = yelp_response['region']['center']['latitude']
+    longitude = yelp_response['region']['center']['longitude']
 
-    day_int = date.today().weekday()
-    day_str = date.today().strftime('%A')
-    time = datetime.now().strftime("%I:%M %p")
+    # Get today's day and time
+    now = datetime.now()
+    now_day = now.weekday()
+    now_weekday = now.strftime('%A')
+    now_time = now.strftime("%-I:%M %p")
 
+    # Append "happyhour" attribute to yelp response
     for business in yelp_businesses:
-
-        happyhour = Happyhour.query.filter_by(yelp_id=business['id'], day=day_int).first()
-
+        happyhour = Happyhour.query.filter_by(yelp_id=business['id'], day=now_day).order_by(Happyhour.happyhour_id.desc()).first()
         business["happyhour"] = happyhour
+
+    # for business in yelp_businesses:
+    #     if business['id'] not in Happyhour.query.
+    #         del business
 
     return render_template("results.html", 
                            businesses=yelp_businesses,
                            user_location=user_location,
-                           day_str=day_str,
-                           time=time)    
+                           now_weekday=now_weekday,
+                           now_time=now_time,
+                           latitude=latitude,
+                           longitude=longitude)    
 
 
 @app.route("/search")
@@ -72,7 +68,6 @@ def search():
     user_location = request.args.get('user_location')
 
     yelp_response = send_api_request3(user_search, user_location)
-
     yelp_businesses = yelp_response['businesses']
 
 
@@ -85,19 +80,20 @@ def search():
 def show_restaurant(yelp_id):
     """Shows details for each restaurant"""
 
-    yelp_response = send_api_request2(yelp_id)
+    yelp_business = send_api_request2(yelp_id)
 
+    week = []
 
-    monday = Happyhour.query.filter_by(yelp_id=yelp_id, day=0).first()
-    tuesday = Happyhour.query.filter_by(yelp_id=yelp_id, day=1).first()
-    wednesday = Happyhour.query.filter_by(yelp_id=yelp_id, day=2).first()
-    thursday = Happyhour.query.filter_by(yelp_id=yelp_id, day=3).first()
-    friday = Happyhour.query.filter_by(yelp_id=yelp_id, day=4).first()
-    saturday = Happyhour.query.filter_by(yelp_id=yelp_id, day=5).first()
-    sunday = Happyhour.query.filter_by(yelp_id=yelp_id, day=6).first()
+    for i in range(7):
+        week.append(Happyhour.query.filter_by(yelp_id=yelp_id, day=i).order_by(Happyhour.happyhour_id.desc()).first())
+
+    monday, tuesday, wednesday, thursday, friday, saturday, sunday = week
+
+    # monday = Happyhour.query.filter_by(yelp_id=yelp_id, day=0).order_by(Happyhour.happyhour_id.desc()).first()
+    # tuesday = Happyhour.query.filter_by(yelp_id=yelp_id, day=1).first()
 
     return render_template("details.html", 
-                            yelp_response=yelp_response,
+                            yelp_business=yelp_business,
                             monday=monday,
                             tuesday=tuesday,
                             wednesday=wednesday,
@@ -110,6 +106,8 @@ def show_restaurant(yelp_id):
 @app.route("/submit/<yelp_id>")
 def submit_form(yelp_id):
 
+    bus_name = request.args.get('business_name')
+
     week = {0 : 'Monday',
             1 : 'Tuesday',
             2 : 'Wednesday', 
@@ -120,37 +118,25 @@ def submit_form(yelp_id):
 
     return render_template("form.html",
                            week=week,
-                           yelp_id=yelp_id)
+                           yelp_id=yelp_id,
+                           bus_name=bus_name)
 
 
 @app.route("/thankyou", methods = ['POST'])
 def thank_user():
     """Retrieves data from form.html"""
 
-    # yelp_id = request.form.get('yelp_id')
-    # start_time = request.form.get('start_time')
-    # end_time = request.form.get('end_time')
-    # day = request.form.get('day')
-    # print(request.form)
-    # for item in request.form.lists():
-    #     print(item)
-    # for item in request.form.getlist("day"):
-    #     print(item)
-
-    # print(request.form.items())
+    for item in request.form.lists():
+        print(item)
 
     for i in range(7):
-    
 
+        yelp_id = request.form.getlist("yelp_id")[0]
         day = request.form.getlist("day")[i]
         start_time = request.form.getlist("start_time")[i]
-        # if start_time == 'Null':
-        #     start_time = None
         end_time = request.form.getlist("end_time")[i]
         # if end_time == 'Null':
-        #     end_time = None
-        yelp_id = request.form.getlist("yelp_id")[0]
-
+        # end_time = None
 
         if start_time != 'Null' and end_time != 'Null':
 

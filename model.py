@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+import time
 
 db = SQLAlchemy()
                              
@@ -36,8 +37,7 @@ class Happyhour(db.Model):
     
     def __repr__(self):
 
-        return f"{self.start_time} to {self.end_time}"
-
+        return f"{self.start_time.strftime('%-I:%M')} - {self.end_time.strftime('%-I:%M %p')}"
 
 def connect_to_db(app):
     """Connect database to Flask app."""

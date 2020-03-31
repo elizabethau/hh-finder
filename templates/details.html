@@ -2,35 +2,68 @@
 
 {% block body %}
 
-
-
 <div class="container">
- 
   <div class="row">
     <div class="col-8">
-        <h2>{{yelp_response.name}}</h2>
-        <p>
-            {{yelp_response.location.display_address[0]}}<br>
-            {{yelp_response.location.display_address[1]}}
+        <h2>{{yelp_business.name}}</h2>
+        <p>{{yelp_business.location.display_address[0]}}<br>
+           {{yelp_business.location.display_address[1]}}
         </p>
-        <p>{{yelp_response.display_phone}}</p>
+        <img src={{yelp_business.photos[0]}} class="img">
+        <img src={{yelp_business.photos[1]}} class="img">
+        <img src={{yelp_business.photos[2]}} class="img">
         <h2>Happy Hour Specials</h2>
     </div>
-
-    <div class="col-4">
+    <div class="col-4" id="ajacks">
         <h2>Happy Hours:</h2>
-        <h4>Monday: {{monday}} </h4>
-        <h4>Tuesday: {{tuesday}}</h4>
-        <h4>Wednesday: {{wednesday}}</h4>
-        <h4>Thursday: {{thursday}}</h4>
-        <h4>Friday: {{friday}}</h4>
-        <h4>Saturday: {{saturday}}</h4>
-        <h4>Sunday: {{sunday}}</h4>
-        <button type="button" class="btn btn-success">Confirm Hours</button>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="row">Monday</th>
+              <td>{{monday}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Tuesday</th>
+              <td>{{tuesday}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Wednesday</th>
+              <td>{{wednesday}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Thursday</th>
+              <td>{{thursday}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Friday</th>
+              <td>{{friday}}</td>
+            </tr>
+             <tr>
+              <th scope="row">Saturday</th>
+              <td>{{saturday}}</td>
+            </tr>
+             <tr>
+              <th scope="row">Sunday</th>
+              <td>{{sunday}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="btn-toolbar">
+        <button type="button" id="confirm" class="btn btn-success mr-2">Confirm Hours</button>
         <!-- Links to input route here -->
-        <a class="btn btn-secondary" href="/submit/{{yelp_response.id}}" role="button">Suggest Edits</a>
-
+        <form action="/submit/{{yelp_business.id}}">
+          <input type="hidden" name= "business_name" value = {{yelp_business.name}}>
+          <button class="btn btn-secondary" type="submit">Suggest Edits</button>
+        </form>
+        </div>
+      <!--   <a class="btn btn-secondary" href="/submit/{{yelp_business.id}}" role="button">Suggest Edits</a> -->
     </div>
   </div>
 </div>
+
+<script src="http://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+<script src="/static/js/ajax.js"></script>
+
 {% endblock %}

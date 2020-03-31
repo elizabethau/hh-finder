@@ -17,6 +17,15 @@ h1 {
     object-fit: cover;
 }
 
+/*to crop the image into a square*/
+.img {
+    object-fit: cover;
+    height: 15vw;
+    width: 15vw;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
 form {
     text-align: center;
 }
@@ -33,3 +42,15 @@ form {
     text-align: center;
 }
 
+#center {
+    text-align: center;
+}
+
+#right {
+    float: right;
+}
+
+#map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 400px;  
+       }

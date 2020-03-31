@@ -5,8 +5,6 @@ from model import Happyhour, connect_to_db, db
 def load_businesses():
     """Load businesses into database"""
 
-    print("test here")
-
     for row in open("seed_data/test"):
         row = row.rstrip()
         happyhour_id, yelp_id, start_time, end_time, day = row.split("|")

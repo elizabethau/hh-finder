@@ -5,13 +5,11 @@
     <h1>Submit Hours</h1>
 
     <form action="/thankyou" METHOD="POST">
-
-
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Restaurant</label>
         <div class="col-sm-4">
-        <input type="text" class="form-control" placeholder= {{yelp_id}} disabled>
-        
+        <input type="text" class="form-control" placeholder= {{bus_name}} disabled>
+
         <input type="hidden" name= "yelp_id" value = {{yelp_id}}>
 
         </div>
@@ -23,7 +21,7 @@
         <label class="col-sm-2 col-form-label">{{day}}</label>
         <input type="hidden" name= "day" value = {{i}} >
         <div class="col-sm-1.5">
-            <select class="form-control" name="start_time_{{day}}">
+            <select class="form-control" name="start_time">
               <option value=Null>None</option>
               <option value=15:00:00>3:00 PM</option>
               <option value=15:30:00>3:30 PM</option>
@@ -43,7 +41,7 @@
               <option value=22:30:00>10:30 PM</option>
               <option value=23:00:00>11:00 PM</option>
               <option value=23:30:00>11:30 PM</option>
-              <option value=00:00:00>12:00 AM</option>
+              <option value=24:00:00>12:00 AM</option>
             </select> 
         </div>
               <label class="col-sm-1 col-form-label">to</label>
@@ -68,7 +66,7 @@
               <option value=22:30:00>10:30 PM</option>
               <option value=23:00:00>11:00 PM</option>
               <option value=23:30:00>11:30 PM</option>
-              <option value=00:00:00>12:00 AM</option>
+              <option value=24:00:00>12:00 AM</option>
             </select> 
         </div>
       </div>
@@ -77,7 +75,6 @@
       <div class="center">
       <button type="submit" class="btn btn-primary">Submit</button>
       </div>
-
     </form>
 
 {% endblock %}

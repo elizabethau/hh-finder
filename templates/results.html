@@ -1,60 +1,76 @@
 {% extends 'base.html' %}
 
 {% block body %}
-  <h1>Happy Hours for {{user_location}} on {{day_str}} at {{time}}</h1>
 
+  <h1>Happy Hours for {{user_location}}</h1> 
+  <h2 id="center">{{now_weekday}}, {{now_time}}</h2>
 
-  <div class="row">
+  <section class="row">
     <div class="col-sm-6">
-    <form action ="/search" class="form-inline">
-      <div class="form-group mx-sm-3 mb-2">
-        <input type="text" class="form-control" name="search" placeholder="Search for a restaurant ex. Butcher & The Boar" >
+      <form action =/search>
+      <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="Search for a restaurant. etc Prohibition" aria-describedby="button-addon2">
         <!-- Passing along hidden input here -->
         <input type="hidden" name= "user_location" value = {{user_location}}>
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" type="submit">Search</button>
+        </div>
       </div>
-      <button type="submit" class="btn btn-primary mb-2">Search</button>
-      
-    </form>
+      </form>
     </div>
-    
     <div class="col-sm-6">
-      <button type="button" class="btn btn-outline-success">Open Now</button>
-     
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Dropdown button
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="row">
-      
-  {% for business in businesses %}
-        
-  <div class="col-sm-3">
-    <div class="card" style="width: 18rem;">
-      <img src={{business.image_url}} class="card-img-top">
-      <div class="card-body">
-        <!-- Links to detail route here -->
-        <h5 class="card-title"><a href=/details/{{business.id}}>{{business.name}}</a></h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{business.location.address1}}</h6>
-        <p class="card-text">{{"%.2f"|format(business.distance/1609)}} mi </p>
-        <h5 class="card-title">{{business.happyhour}}</h5>
-        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      <div class="btn-toolbar float-right" role="toolbar">
+        <div class="btn-group mr-2">
+          <button type="button" class="btn btn-outline-success" data-toggle="button" aria-pressed="false" autocomplete="off">Open Now</button>
+        </div>
+        <div class="btn-group mr-2 dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Distance</a>
+            <a class="dropdown-item" href="#">Ending first</a>
+            <a class="dropdown-item" href="#">Starting first</a>
+            </div>
+        </div>
       </div>
     </div>
+
+  </section>
+
+  <div class="row"> 
+    {% for business in businesses %}  
+    <div class="col-sm-3">
+      <div class="card" style="width: 18rem;">
+        <img src={{business.image_url}} class="card-img-top">
+        <div class="card-body">
+          <!-- Links to detail route here -->
+          <h5 class="card-title"><a href=/details/{{business.id}}>{{business.name}}</a></h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{business.location.address1}}</h6>
+          <p class="card-text">{{"%.2f"|format(business.distance/1609)}} mi </p>
+          <h5 class="card-title">{{business.happyhour}}</h5>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
   </div>
 
-  {% endfor %}
-
-  </div>
+  <div id="map"></div>
+    <script>
+      function initMap() {
+        var uluru = {lat: {{latitude}}, lng: {{longitude}}};
+        var map = new google.maps.Map(
+        document.getElementById('map'), {zoom: 13, center: uluru});
+        var marker = new google.maps.Marker({position: uluru, map: map});
+}
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgjEoy8P-EX-qIdk2SgEZBjJFppRcU5G8&callback=initMap">
+    </script>
 
   <h1>Don't see a place? Add it <a href=/submit>here</a>.</h1>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 {% endblock %}
