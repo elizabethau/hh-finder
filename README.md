@@ -1,7 +1,6 @@
 # Happy Hour Finder
 
-An application that tells you all the happy hours around you based on your
-location and what the current time is.
+An application that crowdsources happy hour information.
 
 ## Features
 

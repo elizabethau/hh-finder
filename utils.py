@@ -8,7 +8,7 @@ base_url = "https://api.yelp.com/v3/businesses/"
 
 def send_api_request(user_input):
 
-    url = base_url + "search?location=" + user_input + "&categories=bars"
+    url = base_url + "search?location=" + user_input + "&term=bars"
 
     response = requests.request("GET", url, headers=headers, data = payload)
 
