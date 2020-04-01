@@ -12,7 +12,17 @@
         <img src={{yelp_business.photos[0]}} class="img">
         <img src={{yelp_business.photos[1]}} class="img">
         <img src={{yelp_business.photos[2]}} class="img">
-        <h2>Happy Hour Specials</h2>
+        <h2>Happy Hour Menu</h2>
+    
+    <div id="map"></div>
+    <script type="text/javascript">
+      latitude = {{ yelp_business.coordinates.latitude }};
+      longitude = {{ yelp_business.coordinates.longitude }};
+    </script>
+    <script src="/static/js/googlemaps.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgjEoy8P-EX-qIdk2SgEZBjJFppRcU5G8&callback=initMap">
+    </script>
     </div>
     <div class="col-4" id="ajacks">
         <h2>Happy Hours:</h2>
@@ -52,7 +62,7 @@
         <button type="button" id="confirm" class="btn btn-success mr-2">Confirm Hours</button>
         <!-- Links to input route here -->
         <form action="/submit/{{yelp_business.id}}">
-          <input type="hidden" name= "business_name" value = {{yelp_business.name}}>
+          <input type="hidden" name= "business_name" value = "{{yelp_business.name}}">
           <button class="btn btn-secondary" type="submit">Suggest Edits</button>
         </form>
         </div>

@@ -1,17 +1,25 @@
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, redirect, request, flash, session, jsonify
+from flask import Flask, render_template, redirect, request, flash, session, jsonify, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 import jinja2
 from model import Happyhour, connect_to_db, db
 import requests
 from utils import send_api_request, send_api_request2, send_api_request3
 from datetime import datetime
+from pytz import timezone
 
 
 app = Flask(__name__)
 app.secret_key = 'pAsSworD123'
 app.jinja_env.undefined = jinja2.StrictUndefined
 # to make Debugging easier^
+
+# Get today's day and time in CST
+CST = timezone('US/Central')
+now = datetime.now(CST)
+now_day = now.weekday()
+now_weekday = now.strftime('%A')
+now_time = now.strftime("%-I:%M %p")
 
 
 @app.route("/")
@@ -29,35 +37,25 @@ def show_results():
 
     # Location defaults to Minneapolis if not entered
     if user_location == "":
-        user_location = "Minneapolis, MN"
+        user_location = "Minneapolis"
 
     yelp_response = send_api_request(user_location)
     yelp_businesses = yelp_response['businesses']
-    latitude = yelp_response['region']['center']['latitude']
-    longitude = yelp_response['region']['center']['longitude']
-
-    # Get today's day and time
-    now = datetime.now()
-    now_day = now.weekday()
-    now_weekday = now.strftime('%A')
-    now_time = now.strftime("%-I:%M %p")
 
     # Append "happyhour" attribute to yelp response
-    for business in yelp_businesses:
-        happyhour = Happyhour.query.filter_by(yelp_id=business['id'], day=now_day).order_by(Happyhour.happyhour_id.desc()).first()
-        business["happyhour"] = happyhour
+    for yelp_business in yelp_businesses:
+        yelp_business["happyhour"] = Happyhour.query.filter_by(yelp_id=yelp_business['id'], day=now_day).order_by(Happyhour.happyhour_id.desc()).first()
 
-    # for business in yelp_businesses:
-    #     if business['id'] not in Happyhour.query.
-    #         del business
+    # for i, yelp_business in enumerate(yelp_businesses):
+    #     if Happyhour.query.filter_by(yelp_id=yelp_business['id']).first() == None:
+    #         yelp_businesses.pop(i)
+    #         pass
 
     return render_template("results.html", 
                            businesses=yelp_businesses,
                            user_location=user_location,
                            now_weekday=now_weekday,
-                           now_time=now_time,
-                           latitude=latitude,
-                           longitude=longitude)    
+                           now_time=now_time)    
 
 
 @app.route("/search")
@@ -70,10 +68,15 @@ def search():
     yelp_response = send_api_request3(user_search, user_location)
     yelp_businesses = yelp_response['businesses']
 
+    for business in yelp_businesses:
+        happyhour = Happyhour.query.filter_by(yelp_id=business['id'], day=now_day).order_by(Happyhour.happyhour_id.desc()).first()
+        business["happyhour"] = happyhour
 
-    return render_template("search_results.html",
+    return render_template("results.html",
                             businesses=yelp_businesses,
-                            user_search=user_search)
+                            user_location=user_location,
+                            now_weekday=now_weekday,
+                            now_time=now_time)
 
 
 @app.route("/details/<yelp_id>")
@@ -106,7 +109,7 @@ def show_restaurant(yelp_id):
 @app.route("/submit/<yelp_id>")
 def submit_form(yelp_id):
 
-    bus_name = request.args.get('business_name')
+    business_name = request.args.get('business_name')
 
     week = {0 : 'Monday',
             1 : 'Tuesday',
@@ -119,7 +122,7 @@ def submit_form(yelp_id):
     return render_template("form.html",
                            week=week,
                            yelp_id=yelp_id,
-                           bus_name=bus_name)
+                           business_name=business_name)
 
 
 @app.route("/thankyou", methods = ['POST'])
@@ -149,9 +152,9 @@ def thank_user():
      
     db.session.commit()
 
-    # print(f'Successfully added: {yelp_id}')
+    print(f'Successfully added: {yelp_id}')
 
-    return 'Thank you'
+    return redirect(url_for('show_restaurant', yelp_id=yelp_id))
 
 
 if __name__ == "__main__":

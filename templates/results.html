@@ -11,7 +11,7 @@
       <div class="input-group">
         <input type="text" class="form-control" name="search" placeholder="Search for a restaurant. etc Prohibition" aria-describedby="button-addon2">
         <!-- Passing along hidden input here -->
-        <input type="hidden" name= "user_location" value = {{user_location}}>
+        <input type="hidden" name= "user_location" value = "{{user_location}}">
         <div class="input-group-append">
           <button class="btn btn-outline-primary" type="submit">Search</button>
         </div>
@@ -33,7 +33,6 @@
         </div>
       </div>
     </div>
-
   </section>
 
   <div class="row"> 
@@ -53,23 +52,6 @@
     </div>
     {% endfor %}
   </div>
-
-  <div id="map"></div>
-    <script type="text/javascript">
-      latitude = {{ latitude }};
-      longitude = {{ longitude }};
-    </script>
-    <script src="/static/js/googlemaps.js">
-      // function initMap() {
-      //   var uluru = {lat: {{ latitude }}, lng: {{ longitude }} };
-      //   var map = new google.maps.Map(
-      //       document.getElementById('map'), {zoom: 13, center: uluru});
-      //   var marker = new google.maps.Marker({position: uluru, map: map});
-      //   }
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgjEoy8P-EX-qIdk2SgEZBjJFppRcU5G8&callback=initMap">
-    </script>
 
   <h1>Don't see a place? Add it <a href=/submit>here</a>.</h1>
 

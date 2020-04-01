@@ -11,7 +11,7 @@ class Restaurant(db.Model):
 
     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     yelp_id = db.Column(db.String, unique=True)
-    name = db.Column(db.String)
+    menu = db.Column(db.String)
 
     def __repr__(self):
 
